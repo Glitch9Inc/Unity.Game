@@ -1,0 +1,18 @@
+{
+    "name": "Glitch9.Game.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:da1e30c3c0769a74bbb30f08bde7f1a0"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
