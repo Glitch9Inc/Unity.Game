@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Glitch9.Game
 {
-    public interface IAudioPlayer
+    public interface ISoundPlayer
     {
         void Initialize();
         void Prepare(List<IMusic> bgmList);

@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Glitch9.Game
 {
-    public class UnityAudioPlayer : IAudioPlayer
+    public class UnitySoundPlayer : ISoundPlayer
     {
         public int CurrentMediaIndex => _currentTrack;
         private List<IMusic> _playlist;
@@ -42,7 +42,7 @@ namespace Glitch9.Game
             {
                 if (_playlist.LogIfNullOrEmpty())
                 {
-                    GNLog.Error($"Play: {typeof(UnityAudioPlayer).Name}의 플레이리스트가 비어있습니다.");
+                    GNLog.Error($"Play: {typeof(UnitySoundPlayer).Name}의 플레이리스트가 비어있습니다.");
                     return;
                 }
 
@@ -167,7 +167,7 @@ namespace Glitch9.Game
         {
             if (!_isInitialized)
             {
-                GNLog.Error($"GetCurrentTrack(): {typeof(UnityAudioPlayer).Name}가 초기화되지 않았습니다.");
+                GNLog.Error($"GetCurrentTrack(): {typeof(UnitySoundPlayer).Name}가 초기화되지 않았습니다.");
                 return null;
             }
             if (_playlist.LogIfNullOrEmpty()) return null;

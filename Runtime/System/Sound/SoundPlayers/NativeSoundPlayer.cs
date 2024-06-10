@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Glitch9.Game
 {
-    public class NativeAudioPlayer : IAudioPlayer
+    public class NativeSoundPlayer : ISoundPlayer
     {
         public int CurrentMediaIndex => _currentTrack;
         private List<IMusic> _playlist;

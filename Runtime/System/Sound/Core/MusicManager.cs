@@ -15,13 +15,13 @@ namespace Glitch9.Game
         /// false면 유니티 오디오 소스를 사용하는것
         /// </summary>
         public bool IsUsingNmp;
-        private IAudioPlayer _player;
+        private ISoundPlayer _player;
 
         public void Initialize(string startUri, Action<IMusic> onMusicChanged, bool useNMP)
         {
             IsUsingNmp = useNMP;
             OnMusicChanged = onMusicChanged;
-            _player = useNMP ? new NativeAudioPlayer() : new UnityAudioPlayer();
+            _player = useNMP ? new NativeSoundPlayer() : new UnitySoundPlayer();
             _player.Initialize();
             _player.SetVolume(SystemConfig.BgmVolume);
             _player.PlayWithUri(startUri, true);
