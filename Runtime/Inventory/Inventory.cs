@@ -264,7 +264,7 @@ namespace Glitch9.Game
             {
                 if (isCurrency)
                 {
-                    GameManager.Instance.CurrencyChanged(nameof(Inventory));
+                    Game.UpdateCurrency(nameof(Inventory));
                 }
 
                 if (action == DatabaseAction.Add)

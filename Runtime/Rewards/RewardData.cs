@@ -95,20 +95,19 @@ namespace Glitch9.Game
 
         private void OnRewardClaimed(IResult result)
         {
-            GameManager.Instance.ResultReceived(this, result);
+            Game.HandleResult(this, result);
             
             if (result.IsFailure)
             {
                 if (ExpReward > 0)
                 {
-                    User userData = User.Player;
-                    if (userData != null) userData.Exp -= ExpReward;
+                    Game.User.Experience -= ExpReward;
                 }
 
                 if (SeasonExpReward > 0)
                 {
-                    SeasonPassSaveData seasonData = SeasonPassManager.Instance.GetCurrenetPlayerData();
-                    seasonData?.UndoExpGain(SeasonExpReward);
+                    //SeasonPassSaveData seasonData = SeasonPassManager.Instance.GetCurrenetPlayerData();
+                    //seasonData?.UndoExpGain(SeasonExpReward);
                 }
             }
         }
@@ -125,26 +124,19 @@ namespace Glitch9.Game
 
             if (ExpReward > 0)
             {
-                User userData = User.Player;
-                if (userData.LogIfNull())
-                {
-                    UIManager.Instance.DisplayError(Issue.UnknownError);
-                    return -1;
-                }
-                userData.Exp += ExpReward;
-                userData.SetMergeBatch(batchId);
+                Game.User.Experience += ExpReward;
             }
 
             if (SeasonExpReward > 0)
             {
-                SeasonPassSaveData seasonData = SeasonPassManager.Instance.GetCurrenetPlayerData();
-                if (seasonData.LogIfNull())
-                {
-                    UIManager.Instance.DisplayError(Issue.UnknownError);
-                    return -1;
-                }
+                //SeasonPassSaveData seasonData = SeasonPassManager.Instance.GetCurrenetPlayerData();
+                //if (seasonData.LogIfNull())
+                //{
+                //    UIManager.Instance.DisplayError(Issue.UnknownError);
+                //    return -1;
+                //}
 
-                seasonData.SetExpGainBatch(batchId, SeasonExpReward);
+                //seasonData.SetExpGainBatch(batchId, SeasonExpReward);
             }
 
             if (Rewards.IsValid())
@@ -154,22 +146,22 @@ namespace Glitch9.Game
                 foreach (IReward reward in Rewards)
                 {
                     if (reward == null) continue;
-                    if (reward is ItemReward stock)
+                    if (reward is ItemReward itemReward)
                     {
-                        Inventory.SetAcquireBatch(stock.Id, stock.Value, batchId);
+                        Inventory.SetAcquireBatch(itemReward.Id, itemReward.Quantity, batchId);
                     }
-                    else if (reward is VoiceAlarmSave voice)
-                    {
-                        string firestoreId = VoiceAlarmSave.CreateId(voice.CompanionId, voice.Title);
-                        User.VoiceAlarms.AddOrUpdate(firestoreId, voice);
-                        isVoiceUpdated = true;
-                    }
+                    //else if (reward is VoiceAlarmSave voice)
+                    //{
+                    //    string firestoreId = VoiceAlarmSave.CreateId(voice.CompanionId, voice.Title);
+                    //    User.VoiceAlarms.AddOrUpdate(firestoreId, voice);
+                    //    isVoiceUpdated = true;
+                    //}
                 }
 
-                if (isVoiceUpdated)
-                {
-                    User.VoiceAlarms.SetMergeBatch(batchId);
-                }
+                //if (isVoiceUpdated)
+                //{
+                //    User.VoiceAlarms.SetMergeBatch(batchId);
+                //}
             }
 
             return batchId;

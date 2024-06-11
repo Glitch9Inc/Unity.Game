@@ -1,12 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using Firebase.Firestore;
-using Glitch9.Apis.Google.Firebase;
-using Glitch9.Apis.Google.Firestore;
 
 namespace Glitch9.Game.MailSystem
 {
-    public static class SystemMailUtils
+    public static class SystemMailExtensions
     {
         private const string SENDER_NAME = "Glitch9";
 
@@ -15,7 +12,7 @@ namespace Glitch9.Game.MailSystem
             Mail mail = new()
             {
                 Id = systemMail.Index,
-                Subject = systemMail.Subject,
+                Title = systemMail.Subject,
                 Content = systemMail.Content,
                 Attachments = ParseAttachedItems(systemMail.Attachments).ToList(),
                 Type = systemMail.Condition,
@@ -39,23 +36,6 @@ namespace Glitch9.Game.MailSystem
                     int value = int.Parse(keyValue[1]);
                     yield return ItemReward.FromItemId(key, value);
                 }
-            }
-        }
-
-        public static async void SendMailToAll(Mail mail)
-        {
-            if (FirebaseManager.User == null)
-            {
-                GNLog.Error("먼저 Firebase에 로그인하세요.");
-                return;
-            }
-
-            QuerySnapshot allUserDatasQuerySnapshot = await FirestoreReferences.Users.Root.GetSnapshotAsync();
-
-            foreach (DocumentSnapshot userData in allUserDatasQuerySnapshot.Documents)
-            {
-                GNLog.Info("<color=blue>전체 메일을 보냈습니다</color> : " + userData.Id.ToString());
-                mail.Send(email: userData.Id);
             }
         }
     }

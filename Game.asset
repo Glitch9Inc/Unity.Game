@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49992082568d1b14cba933639772f9cc, type: 3}
   m_Name: Game
   m_EditorClassIdentifier: 
-  gitUrl: 
+  gitUrl: https://github.com/Glitch9Inc/Unity.Game.git
   gitBranch: main
-  localDir: 
+  localDir: Assets\Glitch9\Game

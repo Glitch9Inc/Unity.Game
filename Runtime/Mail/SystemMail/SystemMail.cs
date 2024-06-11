@@ -9,7 +9,7 @@ namespace Glitch9.Game.MailSystem
     {
         public const string SUBJECT_FORMAT = "system_mail_subject_{0}";
         public const string CONTENT_FORMAT = "system_mail_content_{0}";
-        public override string Key => $"{Index:D4}|{Id}"; // ex. 0001|WelcomeGift
+        public override string ReferenceName => $"{Index:D4}|{Id}"; // ex. 0001|WelcomeGift
 
         [CloudData] public int Index { get; set; } = -1;
         [CloudData] public SystemMailCondition Condition { get; set; } = SystemMailCondition.None;
@@ -30,19 +30,19 @@ namespace Glitch9.Game.MailSystem
                 case SystemMailCondition.PlayerLevel:
                     if (int.TryParse(Argument, out int argLevel))
                     {
-                        return User.Player.Level >= argLevel;
+                        return Game.User.Level >= argLevel;
                     }
                     break;
                 case SystemMailCondition.LoginCount:
                     if (int.TryParse(Argument, out int loginCount))
                     {
-                        return User.ClientData.TotalLoginCount >= loginCount;
+                        return Game.User.LoginCount >= loginCount;
                     }
                     break;
                 case SystemMailCondition.PurchaseCount:
                     if (int.TryParse(Argument, out int purchaseCount))
                     {
-                        return User.ClientData.TotalPurchaseCount >= purchaseCount;
+                        return Game.User.PurchaseCount >= purchaseCount;
                     }
                     break;
                 case SystemMailCondition.SeasonalEvent:
@@ -62,7 +62,7 @@ namespace Glitch9.Game.MailSystem
                 case SystemMailCondition.FriendReferralCount:
                     if (int.TryParse(Argument, out int referralCount))
                     {
-                        return User.ClientData.ReferralCount >= referralCount;
+                        return Game.User.ReferralCount >= referralCount;
                     }
                     break;
                 case SystemMailCondition.SpecialDate:

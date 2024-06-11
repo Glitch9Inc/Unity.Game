@@ -12,7 +12,7 @@ namespace Glitch9.Game
 
         private void Start()
         {
-            GameManager.Instance.EventHandler.OnGameStart += (sender, args) =>
+            Game.OnGameStart += (sender, args) =>
             {
                 if (SystemMails == null)
                 {
@@ -32,7 +32,7 @@ namespace Glitch9.Game
 
         public void LoadMail(Action<bool> onResult = null)
         {
-            GameManager.Instance.EventHandler.OnMailReceived += (sender, mail) =>
+            Game.OnMailReceived += (sender, mail) =>
             {
                 //MenuManager.Instance.SetNewInformation("Inbox", HasUnreadMail());
                 //User.Mails.OrderByDescending(entry => entry.Key).ToDictionary(entry => entry.Key, entry => entry.Value);
@@ -41,7 +41,7 @@ namespace Glitch9.Game
 
         public void ResetMailAvailable()
         {
-            if (HasUnreadMail()) GameManager.Instance.EventHandler.OnMailReceived?.Invoke(this, null);
+            if (HasUnreadMail()) Game.OnMailReceived?.Invoke(this, null);
         }
 
         private bool HasUnreadMail()
@@ -50,7 +50,7 @@ namespace Glitch9.Game
 
             foreach (KeyValuePair<string, Mail> mail in GameManager.Instance.User.Mails)
             {
-                if (mail.Value.State == MailStatus.None) return true;
+                if (mail.Value.Status == MailStatus.None) return true;
             }
 
             return false;
@@ -70,7 +70,7 @@ namespace Glitch9.Game
                 {
                     Mail mail = systemMail.Value.ToMail();
                     mail.Send();
-                    GNLog.Info("시스템메일 발송 : " + mail.Subject);
+                    GNLog.Info("시스템메일 발송 : " + mail.Title);
                     // Add the sent mail to the User's received mails
                     GameManager.Instance.User.ReceivedSystemMails.Add(systemMail.Value.Index);
                 }

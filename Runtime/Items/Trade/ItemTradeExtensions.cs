@@ -1,6 +1,3 @@
-using System;
-using Glitch9.Apis.Google.Firestore;
-
 namespace Glitch9.Game
 {
     public static class ItemTradeExtensions
@@ -34,28 +31,17 @@ namespace Glitch9.Game
             {
                 if (string.IsNullOrEmpty(alertMessage))
                 {
-                    GameManager.Instance.EventHandler.OnItemTrade?.Invoke(nameof(ItemTradeExtensions), itemTrade);
+                    Game.ExecuteTrade(nameof(ItemTradeExtensions), itemTrade);
                 }
                 else
                 {
                     itemTrade.AlertMessage = alertMessage;
-                    GameManager.Instance.EventHandler.OnItemTrade?.Invoke(nameof(ItemTradeExtensions), itemTrade);
+                    Game.ExecuteTrade(nameof(ItemTradeExtensions), itemTrade);
                 }
             }
             return Result.Error(Issue.InsufficientCurrency);
         }
 
-        public static void ExecuteTrade(this ItemTrade itemTrade, Action<IResult> onResult = null)
-        {
-            int batchId = itemTrade.SetTradeBatch();
-            if (batchId == -1)
-            {
-                GNLog.Error(Issue.InvalidBatchOperation);
-                onResult?.Invoke(Result.Error(Issue.InvalidBatchOperation));
-                return;
-            }
-            Firetask.ExecuteBatch(batchId, onResult);
-        }
 
         public static int SetTradeBatch(this ItemTrade itemTrade, int batchId = -1)
         {

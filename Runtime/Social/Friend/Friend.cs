@@ -15,7 +15,7 @@ namespace Glitch9
 
     public class Friend : Firedata<Friend>, IModel, IMapEntry
     {
-        public string Key => Email;
+        public string ReferenceName => Email;
         [CloudData] public string Email { get; set; } = "";
         [CloudData] public FriendStatus Status { get; set; } = FriendStatus.None;
         [CloudData] public UnixTime FriendRequestDate { get; set; }

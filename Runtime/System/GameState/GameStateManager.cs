@@ -1,8 +1,7 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Cysharp.Threading.Tasks;
-using Glitch9.Routina;
 
 namespace Glitch9
 {
@@ -11,7 +10,7 @@ namespace Glitch9
         private const string STATE_BASE_NAME = "GameState";
         public GameStateBase PreviousState { get; set; }
         public GameStateBase CurrentState { get; private set; }
-        
+
         private Dictionary<string, GameStateBase> _states = new();
         private bool _isInitialized = false;
         private bool _isChangingState = false;
@@ -108,13 +107,6 @@ namespace Glitch9
 
             if (CurrentState == targetState)
             {
-                if (CurrentState.BackToInGameMenuOnExit)
-                {
-                    ChangeState<InGameState>();
-                    targetStateName = typeof(InGameState).Name;
-                    PreviousState = CurrentState;
-                }
-
                 if (PreviousState != null && PreviousState != targetState)
                 {
                     GameStateBase tempState = CurrentState;
@@ -182,20 +174,22 @@ namespace Glitch9
 
             await GameSceneManager.Instance.LoadScenesAsync(scenesToLoad);
 
-            CurrentState?.OnExit();
-
-            if (CurrentState.ExitDelay > 0)
+            if (CurrentState != null)
             {
-                await UniTask.Delay(TimeSpan.FromSeconds(CurrentState.ExitDelay));
-            }
+                CurrentState.OnExit();
 
-            PreviousState = CurrentState;
-            CurrentState = newStateBase;
+                if (CurrentState.ExitDelay > 0)
+                {
+                    await UniTask.Delay(TimeSpan.FromSeconds(CurrentState.ExitDelay));
+                }
+
+                PreviousState = CurrentState;
+                CurrentState = newStateBase;
+            }
 
             await GameSceneManager.Instance.UnloadScenesAsync(scenesToUnload);
 
-            CurrentState.OnEnter(enterArg);
-
+            CurrentState?.OnEnter(enterArg);
             _isChangingState = false;
         }
     }

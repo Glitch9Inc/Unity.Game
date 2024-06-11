@@ -2,7 +2,7 @@ using System;
 
 namespace Glitch9
 {
-    public class FriendUtility
+    public class FriendUtils
     {
         /// <summary>
         /// 친구 요청을 보낸다.

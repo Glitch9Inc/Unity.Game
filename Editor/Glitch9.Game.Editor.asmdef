@@ -2,6 +2,10 @@
     "name": "Glitch9.Game.Editor",
     "rootNamespace": "",
     "references": [
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:519ce8ff3a59daa4cbdf56be0b339a2e",
+        "GUID:4717c971418fe7f41b7a0071b5f9c608",
+        "GUID:66d06474790de694e9abbd80463e46a0",
         "GUID:da1e30c3c0769a74bbb30f08bde7f1a0"
     ],
     "includePlatforms": [
