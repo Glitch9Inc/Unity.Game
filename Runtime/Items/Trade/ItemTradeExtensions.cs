@@ -31,12 +31,12 @@ namespace Glitch9.Game
             {
                 if (string.IsNullOrEmpty(alertMessage))
                 {
-                    Game.ExecuteTrade(nameof(ItemTradeExtensions), itemTrade);
+                    MyGame.ExecuteTrade(nameof(ItemTradeExtensions), itemTrade);
                 }
                 else
                 {
                     itemTrade.AlertMessage = alertMessage;
-                    Game.ExecuteTrade(nameof(ItemTradeExtensions), itemTrade);
+                    MyGame.ExecuteTrade(nameof(ItemTradeExtensions), itemTrade);
                 }
             }
             return Result.Error(Issue.InsufficientCurrency);

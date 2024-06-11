@@ -12,7 +12,7 @@ namespace Glitch9.Game
 
         private void Start()
         {
-            Game.OnGameStart += (sender, args) =>
+            MyGame.OnGameStart += (sender, args) =>
             {
                 if (SystemMails == null)
                 {
@@ -32,7 +32,7 @@ namespace Glitch9.Game
 
         public void LoadMail(Action<bool> onResult = null)
         {
-            Game.OnMailReceived += (sender, mail) =>
+            MyGame.OnMailReceived += (sender, mail) =>
             {
                 //MenuManager.Instance.SetNewInformation("Inbox", HasUnreadMail());
                 //User.Mails.OrderByDescending(entry => entry.Key).ToDictionary(entry => entry.Key, entry => entry.Value);
@@ -41,7 +41,7 @@ namespace Glitch9.Game
 
         public void ResetMailAvailable()
         {
-            if (HasUnreadMail()) Game.OnMailReceived?.Invoke(this, null);
+            if (HasUnreadMail()) MyGame.OnMailReceived?.Invoke(this, null);
         }
 
         private bool HasUnreadMail()

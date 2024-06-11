@@ -4,7 +4,6 @@ using System.Collections;
 using System.IO;
 using System.Threading;
 using Glitch9.IO.Network;
-using Glitch9.IO;
 using Glitch9.IO.Files;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -62,19 +61,19 @@ namespace Glitch9
             set => SetVoiceVolume(value);
         }
 
-        private AudioMixer AudioMixer => _sfxAudioSource.outputAudioMixerGroup.audioMixer;
+        private AudioMixer AudioMixer => _sfxPlayer.outputAudioMixerGroup.audioMixer;
 
-        private AudioSource _sfxAudioSource;
-        private AudioSource _voiceAudioSource;
-        private AudioSource _bgmAudioSource;
+        private AudioSource _sfxPlayer;
+        private AudioSource _voicePlayer;
+        private AudioSource _bgmPlayer;
 
 
         protected override void Awake()
         {
             base.Awake();
-            _sfxAudioSource = transform.GetChild(0).GetComponent<AudioSource>();
-            _voiceAudioSource = transform.GetChild(1).GetComponent<AudioSource>();
-            _bgmAudioSource = transform.GetChild(2).GetComponent<AudioSource>();
+            _sfxPlayer = transform.GetChild(0).GetComponent<AudioSource>();
+            _voicePlayer = transform.GetChild(1).GetComponent<AudioSource>();
+            _bgmPlayer = transform.GetChild(2).GetComponent<AudioSource>();
         }
 
         private void Start()
@@ -122,25 +121,26 @@ namespace Glitch9
         private float RetrieveLog10(float value) => Mathf.Log10(value) * 20;
         public void PlaySFX(string key) => PlayAudioClip(SoundType.SFX, key);
         public void PlaySFX(AudioClip clip) => PlayAudioClip(SoundType.SFX, clip);
-        public void StopSfx() => _sfxAudioSource.Stop();
+        public void StopSfx() => _sfxPlayer.Stop();
         public void PlayVoice(string key) => PlayAudioClip(SoundType.Voice, key);
         public void PlayVoice(AudioClip clip) => PlayAudioClip(SoundType.Voice, clip);
-        public void StopVoice() => _voiceAudioSource.Stop();
+        public void StopVoice() => _voicePlayer.Stop();
 
         /// <summary>
         /// Firebase Cloud Storage에서 BGM을 다운받아 재생합니다.
         /// 작업이 끝나면 오디오소스(Player) 인스턴스를 반환합니다.
         /// </summary>
-        public async UniTask<AudioSource> PlayBgmAsync(string fileUri, Action onPrepared, CancellationToken token)
+        public async UniTask<AudioSource> PlayBGMAsync(string fileUri, Action onPrepared, CancellationToken token)
         {
-            await DownloadAndPlayAsync(_bgmAudioSource, fileUri, GetLocalBgmPath(fileUri), token, onPrepared);
-            return _bgmAudioSource;
+            await DownloadAndPlayAsync(_bgmPlayer, fileUri, GetLocalBGMPath(fileUri), token, onPrepared);
+            return _bgmPlayer;
         }
 
-        public void StopBGM() => _bgmAudioSource.Stop();
-        public void FadeOutBGM(float duration = 3f) => FadeOutPlayer(_bgmAudioSource, duration);
+        public void PlayBGM(int trackNum) => throw new NotImplementedException();
+        public void StopBGM() => _bgmPlayer.Stop();
+        public void FadeOutBGM(float duration = 3f) => FadeOutPlayer(_bgmPlayer, duration);
 
-        private string GetLocalBgmPath(string fileUri)
+        private string GetLocalBGMPath(string fileUri)
         {
             string filename = Path.GetFileName(fileUri);
             return System.IO.Path.Combine(Application.persistentDataPath + "/BGM/", filename);
@@ -150,9 +150,9 @@ namespace Glitch9
         {
             return soundType switch
             {
-                SoundType.SFX => _sfxAudioSource,
-                SoundType.Voice => _voiceAudioSource,
-                SoundType.BGM => _bgmAudioSource,
+                SoundType.SFX => _sfxPlayer,
+                SoundType.Voice => _voicePlayer,
+                SoundType.BGM => _bgmPlayer,
                 _ => null,
             };
         }
@@ -236,7 +236,7 @@ namespace Glitch9
         private void PlayWithTempAudioSource(AudioClip audioClip)
         {
             AudioSource newAudioSource = gameObject.AddComponent<AudioSource>();
-            newAudioSource.outputAudioMixerGroup = _sfxAudioSource.outputAudioMixerGroup;
+            newAudioSource.outputAudioMixerGroup = _sfxPlayer.outputAudioMixerGroup;
             newAudioSource.clip = audioClip;
 
             // Play the sound

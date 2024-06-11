@@ -4,5 +4,7 @@ namespace Glitch9.Game
     {
         string Id { get; }
         string Name { get; }
+        bool IsSpawned { get; set; }
+        void Save();
     }
 }

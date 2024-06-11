@@ -95,13 +95,13 @@ namespace Glitch9.Game
 
         private void OnRewardClaimed(IResult result)
         {
-            Game.HandleResult(this, result);
+            MyGame.HandleResult(this, result);
             
             if (result.IsFailure)
             {
                 if (ExpReward > 0)
                 {
-                    Game.User.Experience -= ExpReward;
+                    MyGame.User.Experience -= ExpReward;
                 }
 
                 if (SeasonExpReward > 0)
@@ -124,7 +124,7 @@ namespace Glitch9.Game
 
             if (ExpReward > 0)
             {
-                Game.User.Experience += ExpReward;
+                MyGame.User.Experience += ExpReward;
             }
 
             if (SeasonExpReward > 0)

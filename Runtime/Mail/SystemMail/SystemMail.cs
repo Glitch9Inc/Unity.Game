@@ -30,19 +30,19 @@ namespace Glitch9.Game.MailSystem
                 case SystemMailCondition.PlayerLevel:
                     if (int.TryParse(Argument, out int argLevel))
                     {
-                        return Game.User.Level >= argLevel;
+                        return MyGame.User.Level >= argLevel;
                     }
                     break;
                 case SystemMailCondition.LoginCount:
                     if (int.TryParse(Argument, out int loginCount))
                     {
-                        return Game.User.LoginCount >= loginCount;
+                        return MyGame.User.LoginCount >= loginCount;
                     }
                     break;
                 case SystemMailCondition.PurchaseCount:
                     if (int.TryParse(Argument, out int purchaseCount))
                     {
-                        return Game.User.PurchaseCount >= purchaseCount;
+                        return MyGame.User.PurchaseCount >= purchaseCount;
                     }
                     break;
                 case SystemMailCondition.SeasonalEvent:
@@ -62,7 +62,7 @@ namespace Glitch9.Game.MailSystem
                 case SystemMailCondition.FriendReferralCount:
                     if (int.TryParse(Argument, out int referralCount))
                     {
-                        return Game.User.ReferralCount >= referralCount;
+                        return MyGame.User.ReferralCount >= referralCount;
                     }
                     break;
                 case SystemMailCondition.SpecialDate:

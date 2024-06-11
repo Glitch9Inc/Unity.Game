@@ -1,7 +1,7 @@
 using Glitch9.Apis.Google.Firestore;
 using Glitch9.Apis.Google.Firestore.Tasks;
 using Glitch9.Cloud;
-using Glitch9.Toolkits.SmartLocalization;
+using Glitch9.SmartLocalization;
 using System;
 using System.Collections.Generic;
 
@@ -66,7 +66,7 @@ namespace Glitch9.Game.MailSystem
             this.SetMergeBatch(batchId);
             IResult result = await Firetask.ExecuteBatchAsync(batchId);
             onComplete?.Invoke(result);
-            if (result.IsSuccess) Game.MakeAnnouncement(this, AnnounceType.NewMail, "new_mail_received".Localize());
+            if (result.IsSuccess) MyGame.MakeAnnouncement(this, AnnounceType.NewMail, "new_mail_received".Localize());
         }
 
         public void Add(string itemId, int quantity)

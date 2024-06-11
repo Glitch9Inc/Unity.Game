@@ -66,7 +66,7 @@ namespace Glitch9.Game
             catch (Exception e)
             {
                 GNLog.Exception(e);
-                Game.DisplayIssue(this, Issue.UnknownError);
+                MyGame.DisplayIssue(this, Issue.UnknownError);
             }
 
             return Result.Fail("Failed to execute function");

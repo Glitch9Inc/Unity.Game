@@ -1,5 +1,5 @@
 using Glitch9.Database;
-using Glitch9.Toolkits.SmartLocalization;
+using Glitch9.SmartLocalization;
 using System;
 using UnityEngine;
 

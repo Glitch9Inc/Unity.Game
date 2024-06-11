@@ -7,10 +7,10 @@ using UnityEngine;
 
 namespace Glitch9.Game
 {
-    public class UnitySoundPlayer : ISoundPlayer
+    public class UnityBGMPlayer : IBGMPlayer
     {
         public int CurrentMediaIndex => _currentTrack;
-        private List<IMusic> _playlist;
+        private List<ISoundTrack> _playlist;
         private int _currentTrack;
         private bool _isPreviewing = false;
         private bool _isInitialized = false;
@@ -23,7 +23,7 @@ namespace Glitch9.Game
             _isInitialized = true;
         }
 
-        public void Prepare(List<IMusic> bgmList)
+        public void Prepare(List<ISoundTrack> bgmList)
         {
             Initialize();
             _playlist = bgmList;
@@ -42,7 +42,7 @@ namespace Glitch9.Game
             {
                 if (_playlist.LogIfNullOrEmpty())
                 {
-                    GNLog.Error($"Play: {typeof(UnitySoundPlayer).Name}의 플레이리스트가 비어있습니다.");
+                    GNLog.Error($"Play: {typeof(UnityBGMPlayer).Name}의 플레이리스트가 비어있습니다.");
                     return;
                 }
 
@@ -52,7 +52,7 @@ namespace Glitch9.Game
                     return;
                 }
 
-                IMusic currentMusic = _playlist[index];
+                ISoundTrack currentMusic = _playlist[index];
                 if (currentMusic.LogIfNull())
                 {
                     GNLog.Error($"Play: {index}번째 BGM이 비어있습니다.");
@@ -105,7 +105,12 @@ namespace Glitch9.Game
             SoundManager.Instance.FadeOutBGM(duration);
         }
 
-        public void StartPreview(IMusic music)
+        public void StartPreview(int trackNumber)
+        {
+            StartPreview(_playlist[trackNumber]);
+        }
+        
+        public void StartPreview(ISoundTrack music)
         {
             if (music.LogIfNull()) return;
             PlayWithUri(music.Uri, true);
@@ -141,7 +146,7 @@ namespace Glitch9.Game
 
             try
             {
-                AudioSource audioSource = await SoundManager.Instance.PlayBgmAsync(uri, () => MusicManager.Instance.UpdateMusicInformation(GetCurrentTrack()), _cts.Token);
+                AudioSource audioSource = await SoundManager.Instance.PlayBGMAsync(uri, () => BGMManager.Instance.UpdateMusicInformation(GetCurrentTrack()), _cts.Token);
                 if (audioSource == null || _cts.Token.IsCancellationRequested) return;
                 await WaitForAudioEndAsync(audioSource, _cts.Token);
             }
@@ -163,11 +168,11 @@ namespace Glitch9.Game
             else PlayWithUri(_currentUri, true);
         }
 
-        public IMusic GetCurrentTrack()
+        public ISoundTrack GetCurrentTrack()
         {
             if (!_isInitialized)
             {
-                GNLog.Error($"GetCurrentTrack(): {typeof(UnitySoundPlayer).Name}가 초기화되지 않았습니다.");
+                GNLog.Error($"GetCurrentTrack(): {typeof(UnityBGMPlayer).Name}가 초기화되지 않았습니다.");
                 return null;
             }
             if (_playlist.LogIfNullOrEmpty()) return null;

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Glitch9.Game
 {
-    public class Game
+    public class MyGame
     {
         private static bool InstanceIsNull()
         {

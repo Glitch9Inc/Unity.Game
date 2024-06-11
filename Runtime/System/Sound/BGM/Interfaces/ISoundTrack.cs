@@ -1,6 +1,6 @@
 namespace Glitch9.Game
 {
-    public interface IMusic
+    public interface ISoundTrack
     {
         string Title { get; }
         string Artist { get; }

@@ -5,10 +5,10 @@ using System.Collections.Generic;
 
 namespace Glitch9.Game
 {
-    public class NativeSoundPlayer : ISoundPlayer
+    public class NativeBGMPlayer : IBGMPlayer
     {
         public int CurrentMediaIndex => _currentTrack;
-        private List<IMusic> _playlist;
+        private List<ISoundTrack> _playlist;
         private Playlist _nmpPlaylist;
         private int _currentTrack;
         private int _bgmId;
@@ -19,23 +19,23 @@ namespace Glitch9.Game
             {
                 if (initialized)
                 {
-                    MusicManager.Instance.SetBackgroundControls(SystemConfig.BgmBackgroundControls);
-                    MusicManager.Instance.SetBackgroundMode(SystemConfig.BgmBackgroundPlay);
+                    BGMManager.Instance.SetBackgroundControls(SystemConfig.BgmBackgroundControls);
+                    BGMManager.Instance.SetBackgroundMode(SystemConfig.BgmBackgroundPlay);
                     MediaPlayer.Volume = SystemConfig.BgmVolume;
                 }
             };
 
             MediaEvents.onPrepared += () =>
             {
-                IMusic music = _playlist[CurrentMediaIndex];
-                MusicManager.Instance.UpdateMusicInformation(music);
+                ISoundTrack music = _playlist[CurrentMediaIndex];
+                BGMManager.Instance.UpdateMusicInformation(music);
             };
 
             MediaPlayer.RepeatMode = RepeatMode.RepeatAll;
             MediaPlayer.Play();
         }
 
-        public void Prepare(List<IMusic> bgmList)
+        public void Prepare(List<ISoundTrack> bgmList)
         {
             _playlist = bgmList;
             Playlist playlist = ParsePlaylist(bgmList);
@@ -68,7 +68,7 @@ namespace Glitch9.Game
                 return;
             }
 
-            IMusic music = null; //SoundManager.Instance.Get(index);
+            ISoundTrack music = null; //SoundManager.Instance.Get(index);
             if (music == null)
             {
                 GNLog.Error("BGM시스템에 문제가 있습니다. FALLBACK_BGM_ID(6009)를 찾을 수 없습니다.");
@@ -129,13 +129,13 @@ namespace Glitch9.Game
             await UniTask.Delay((int)(duration * 1000));
         }
 
-        private Playlist ParsePlaylist(List<IMusic> bgmList)
+        private Playlist ParsePlaylist(List<ISoundTrack> bgmList)
         {
             List<MediaItem> list = new();
 
             for (int i = 0; i < bgmList.Count; i++)
             {
-                IMusic music = bgmList[i];
+                ISoundTrack music = bgmList[i];
 
                 MediaMetadata mediaMetadata = new()
                 {
@@ -153,7 +153,13 @@ namespace Glitch9.Game
             return new Playlist(list);
         }
 
-        public void StartPreview(IMusic music)
+        public void StartPreview(int trackNumber)
+        {
+            StartPreview(_playlist[trackNumber]);
+        }
+
+        
+        public void StartPreview(ISoundTrack music)
         {
             if (music == null)
             {
@@ -208,7 +214,7 @@ namespace Glitch9.Game
             WaitAndPlayAsync(.8f, playlist).Forget();
         }
 
-        public IMusic GetCurrentTrack()
+        public ISoundTrack GetCurrentTrack()
         {
             if (_playlist.LogIfNullOrEmpty()) return null;
             return _playlist[_currentTrack];
